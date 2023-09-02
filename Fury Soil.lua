@@ -13,6 +13,7 @@ local SLEEP_SHORT = {200, 200, 200}
 local bankIds = { 3418, 24855, 2718, 24856 }
 
 local soilBoxId = 49538
+local astralsId = 9875
 
 -- Change number to f-key you wish to use
 local preset = 2
@@ -100,6 +101,12 @@ do------------------------------------------------------------------------------
 
     idleCheck()
     API.RandomEvents()
+
+    if (API.InvStackSize(astralsId) < 2) then
+        print("Out of astral runes")
+        API.Write_LoopyLoop(false)
+        goto start_of_loop
+    end
 
     if (API.isProcessing()) then
         print("Processing")

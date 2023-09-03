@@ -35,20 +35,6 @@ local soilIds = { 49525, 49517, 49521, 49523, 49519, 50696}
 
 local key = preset_to_key[preset]
 
-local afk = os.time()
-local randomTime = math.random(180, 280) -- between 3 and 4.66 minutes 
-
-function idleCheck()
-    local timeDiff = os.difftime(os.time(), afk)
-
-    if timeDiff > randomTime then
-        -- do stuff here...  turn camera, send keys, move mouse w/e
-        API.PIdle2()
-        afk = os.time()
-        randomTime = math.random(180, 280) -- between 3 and 4.66 minutes 
-    end
-end
-
 function sleepUntil(conditionFunc, timeout, message)
     local startTime = os.time()
     while not conditionFunc() do
@@ -99,7 +85,6 @@ API.Write_LoopyLoop(true)
 while(API.Read_LoopyLoop())
 do-----------------------------------------------------------------------------------
 
-    idleCheck()
     API.RandomEvents()
 
     if (API.InvStackSize(astralsId) < 2) then

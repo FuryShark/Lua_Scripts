@@ -13,7 +13,7 @@ local SLEEP_SHORT = {200, 200, 200}
 local bankIds = { 3418, 24855, 2718, 24856 }
 
 local soilBoxId = 49538
-local astralsId = 9875
+local astralsId = 9075
 
 -- Change number to f-key you wish to use
 local preset = 2

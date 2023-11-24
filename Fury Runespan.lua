@@ -687,7 +687,6 @@ local function performCommonChecks()
 end
 
 
-API.Write_LoopyLoop(true)
 while API.Read_LoopyLoop() do
     performCommonChecks()
 

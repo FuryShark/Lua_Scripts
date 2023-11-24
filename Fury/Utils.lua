@@ -97,5 +97,14 @@ function FuryUtils.objExists(objId, distance)
     end
 end
 
+function FuryUtils:randomSleep(minMilliseconds, maxMilliseconds)
+    local randomDelay = math.random(minMilliseconds, maxMilliseconds)
+    local start = os.clock()
+    local target = start + (randomDelay / 1000)
+    while os.clock() < target do
+        API.RandomSleep2(100, 0, 0)
+    end
+end
+
 local instance = FuryUtils.new()
 return instance

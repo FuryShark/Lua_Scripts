@@ -641,7 +641,7 @@ local function siphonEntity(entityType)
     local highestEntity = findHighestLevelEntity(entityData, playerLevel, currentIsland, entityType)
 
     if highestEntity then
-        print("Highest level " .. ((entityType == 0) and "object" or "npc") .. " ID: " .. highestEntity.id .. ", Level required: " .. highestEntity.level_required)
+        --print("Highest level " .. ((entityType == 0) and "object" or "npc") .. " ID: " .. highestEntity.id .. ", Level required: " .. highestEntity.level_required)
 
         local actionFunction = (entityType == 0) and API.DoAction_Object1 or API.DoAction_NPC
         local actionType = (entityType == 0) and API.OFF_ACT_GeneralObject_route0 or API.OFF_ACT_InteractNPC_route

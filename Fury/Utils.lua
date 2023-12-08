@@ -46,7 +46,9 @@ function FuryUtils:sleepUntil(conditionFunc, timeout, message, callback)
     end
     if conditionFunc() then
         print("Sleep condition met for " .. message)
+        return true
     end
+    return false
 end
 
 --- Checks if an NPC with the given ID exists within a specified distance.
@@ -101,10 +103,53 @@ function FuryUtils:randomSleep(minMilliseconds, maxMilliseconds)
     local randomDelay = math.random(minMilliseconds, maxMilliseconds)
     local start = os.clock()
     local target = start + (randomDelay / 1000)
-    while os.clock() < target do
+    while os.clock() < target and API.Read_LoopyLoop() do
         API.RandomSleep2(100, 0, 0)
     end
 end
+
+
+--- Banks all items in the inventory except for those specified in the provided table.
+-- This function iterates through the player's inventory and banks each unique item
+-- unless its ID matches one of the IDs listed in the exclusion table.
+-- Requires Bank Transfer button to be set to "All"
+-- @param itemIds table Either an array or a key-value table of item IDs to exclude from banking.
+--                  If it's an array, use the item IDs directly.
+--                  If it's a key-value table, the values should be the item IDs.
+-- @usage
+--      local ITEM_IDS = {
+--          rottenEgg = 53100,
+--          goodEgg = 53099,
+--          sharpShellShard = 53093
+--      }
+--      FuryUtils:BankAllExcept(ITEM_IDS) -- Will bank all items except for rottenEgg, goodEgg, and sharpShellShard.
+function FuryUtils:BankAllExcept(itemIds)
+    local invArray = API.FetchBankInvArray()
+    
+    if not invArray or #invArray == 0 then
+        print("Inventory is empty or nil.")
+        return
+    end
+
+    local excludeMap = {}
+    for _, itemId in pairs(itemIds) do
+        excludeMap[itemId] = true
+    end
+
+    local uniqueItemIDs = {}
+
+    for _, item in ipairs(invArray) do
+        if item.itemid1 and not uniqueItemIDs[item.itemid1] and not excludeMap[item.itemid1] then
+            uniqueItemIDs[item.itemid1] = true
+            print("Banking item with ID: " .. tostring(item.itemid1))
+            if API.DoAction_Interface(0xffffffff, item.itemid1, 1, 517, 15, item.id3, 5376) then
+                FuryUtils:randomSleep(100,200)
+            end
+        end
+    end
+end
+
+
 
 local instance = FuryUtils.new()
 return instance

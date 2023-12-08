@@ -8,7 +8,7 @@ FuryWebhook.__index = FuryWebhook
 function FuryWebhook.new()
     local self = setmetatable({}, FuryWebhook)
     -- Optional: set url for a default webhook
-    self.url = "https://discord.com/api/webhooks/1137729932173267004/6EI5iSO_O4FcbOVXHZrJa7Fv3_ydWTaTQbi4-TRuTkoiRX_T8GkaBncVepzdhDELFn4Y"
+    self.url = ""
     return self
 end
 

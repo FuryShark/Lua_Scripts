@@ -638,15 +638,27 @@ local function siphonEntity(entityType)
     local playerLevel = getRunecraftingLevel()
     local currentIsland = islands[mapNumber][islandIndex]
     local entityData = (entityType == 0) and OBJECT_IDS or NPC_IDS
+
     local highestEntity = findHighestLevelEntity(entityData, playerLevel, currentIsland, entityType)
 
     if highestEntity then
-        --print("Highest level " .. ((entityType == 0) and "object" or "npc") .. " ID: " .. highestEntity.id .. ", Level required: " .. highestEntity.level_required)
+        local idStr = ""
+        if type(highestEntity.id) == "table" then
+            for i, id in ipairs(highestEntity.id) do
+                idStr = idStr .. tostring(id)
+                if i < #highestEntity.id then
+                    idStr = idStr .. ", "
+                end
+            end
+        else
+            idStr = tostring(highestEntity.id)
+        end
+
+        print("Highest level " .. ((entityType == 0) and "object" or "npc") .. " ID: " .. idStr .. ", Level required: " .. highestEntity.level_required)
 
         local actionFunction = (entityType == 0) and API.DoAction_Object1 or API.DoAction_NPC
         local actionType = (entityType == 0) and API.OFF_ACT_GeneralObject_route0 or API.OFF_ACT_InteractNPC_route
-
-        if actionFunction(0x29, actionType, {highestEntity.id}, 50) then
+        if actionFunction(0x29, actionType, (type(highestEntity.id) == "table" and highestEntity.id or {highestEntity.id}), 50) then
             FuryUtils:randomSleep(2000,4000)
         end
     else
@@ -685,7 +697,6 @@ local function performCommonChecks()
     gui:updateTrackedSkills()
     FuryUtils:idleCheck()    
 end
-
 
 while API.Read_LoopyLoop() do
     performCommonChecks()

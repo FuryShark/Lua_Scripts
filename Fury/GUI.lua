@@ -49,7 +49,7 @@ local SKILL_COLORS = {
     SLAYER = ImColor.new(135, 0, 7),             -- Dark red
     HUNTER = ImColor.new(171, 190, 131),           -- Light olive 
     SMITHING = ImColor.new(130, 154, 103),         -- olive green
-    CRAFTING = ImColor.new(237, 232, 165),          -- Light beige
+    CRAFTING = ImColor.new(86, 59, 35),          -- Light beige
     FLETCHING = ImColor.new(0, 126, 151),         -- Deep teal
     HERBLORE = ImColor.new(51, 206, 70),           -- bright green
     RUNECRAFTING = ImColor.new(255, 158, 40),     -- orangey
@@ -61,7 +61,7 @@ local SKILL_COLORS = {
     FISHING = ImColor.new(115,177,230),          -- Dark blue
     MINING = ImColor.new(148, 165, 138),            -- Mud brown
     DIVINATION = ImColor.new(145, 107, 255),     -- Light cyan
-    INVENTION = ImColor.new(254,252,80),      -- Metallic blue-gray
+    INVENTION = ImColor.new(133,108,17,255),      -- Metallic blue-gray
     ARCHAEOLOGY = ImColor.new(110,90,70),      -- Sienna brown
     NECROMANCY = ImColor.new(89,1,150)         -- Dark purple
 }

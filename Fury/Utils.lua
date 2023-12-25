@@ -55,7 +55,7 @@ end
 -- @param npcId The ID of the NPC to check for.
 -- @param distance (optional) The distance within which to check for the NPC.
 -- @return true if the NPC exists within the specified distance, false otherwise.
-function FuryUtils.npcExists(npcId, distance)
+function FuryUtils:npcExists(npcId, distance)
     distance = distance or 20  -- Default distance is 20 if not specified
     if type(npcId) == "table" then
         for _, id in ipairs(npcId) do
@@ -147,6 +147,88 @@ function FuryUtils:BankAllExcept(itemIds)
             end
         end
     end
+end
+
+--- Generates a random point within a specified rectangular area.
+-- @param x1 number The x-coordinate of the first corner of the rectangle.
+-- @param y1 number The y-coordinate of the first corner of the rectangle.
+-- @param x2 number The x-coordinate of the opposite corner of the rectangle.
+-- @param y2 number The y-coordinate of the opposite corner of the rectangle.
+-- @return WPOINT A random point within the specified rectangular area.
+function FuryUtils:getRandomPointInArea(x1, y1, x2, y2)
+    local minX = math.min(x1, x2)
+    local maxX = math.max(x1, x2)
+    local minY = math.min(y1, y2)
+    local maxY = math.max(y1, y2)
+    
+    local z = API.PlayerCoord().z
+
+    local randomX = math.random(minX, maxX)
+    local randomY = math.random(minY, maxY)
+    return WPOINT.new(randomX, randomY, z)
+end
+
+
+--- Checks if the player is within a specified area.
+-- This function can handle both rectangular and polygonal areas.
+-- For a rectangle, the area is defined by two opposite corners as four numbers {x1, y1, x2, y2}.
+-- For a polygon, the area is defined as a table of points, each point being a table with 'x' and 'y' keys.
+-- @param area table The area definition. Can be either {x1, y1, x2, y2} for a rectangle,
+--                    or an array of points for a polygon.
+-- @return boolean True if the player is within the specified area, False otherwise.
+-- @usage 
+--      -- Example for a rectangle:
+--      local rectangleArea = {3020, 3234, 3022, 3239}
+--      local inRectangle = FuryUtils:playerInArea(rectangleArea)
+--      print("Player is in rectangle area: ", inRectangle)
+--
+--      -- Example for a polygon:
+--      local polygonArea = {
+--          {x = 3020, y = 3234},
+--          {x = 3022, y = 3234},
+--          {x = 3022, y = 3239},
+--          {x = 3020, y = 3239}
+--      }
+--      local inPolygon = FuryUtils:playerInArea(polygonArea)
+--      print("Player is in polygon area: ", inPolygon)
+function FuryUtils:playerInArea(area, floor)
+    floor = floor or 0
+    local point = API.PlayerCoord()
+    if point.z ~= floor then
+        return false
+    end
+
+    -- Normalize area format
+    if #area == 4 and type(area[1]) == "number" then
+        -- Rectangle format: {x1, y1, x2, y2}
+        local x1, y1, x2, y2 = area[1], area[2], area[3], area[4]
+        area = {
+            {x = x1, y = y1},
+            {x = x2, y = y1},
+            {x = x2, y = y2},
+            {x = x1, y = y2}
+        }
+    elseif type(area[1]) == "table" and #area[1] == 2 then
+        -- Array of arrays format: {{x1, y1}, {x2, y2}, ...}
+        for i, point in ipairs(area) do
+            area[i] = {x = point[1], y = point[2]}
+        end
+    end
+
+    local count = 0
+    local n = #area
+    for i = 1, n do
+        local j = (i % n) + 1
+        local vertex1 = area[i]
+        local vertex2 = area[j]
+        if ((vertex1.y > point.y) ~= (vertex2.y > point.y)) and
+            (point.x < (vertex2.x - vertex1.x) * (point.y - vertex1.y) / (vertex2.y - vertex1.y) + vertex1.x) then
+            count = count + 1
+        end
+    end
+
+    -- Point is inside the polygon if count is odd
+    return (count % 2) == 1
 end
 
 

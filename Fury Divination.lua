@@ -21,8 +21,6 @@ local chronicleIds = {
     enhanced = 51489
 } 
 
-nextChronicleRandom = math.random(10,20)
-
 -- Define the wisp IDs for each type of wisp
 local wispIds = {
     {normal = {18150, 18173}, enriched = {-1, -1}},    -- Pale Wisps
@@ -59,7 +57,7 @@ local memoryIds = {
 
 -- Find wisps near you and set normalIds and enrichedIds
 for _, ids in ipairs(wispIds) do
-    if FuryUtils.npcExists(ids.normal) then
+    if FuryUtils:npcExists(ids.normal) then
         normalId = ids.normal
         enrichedId = ids.enriched
         break
@@ -86,7 +84,7 @@ local function waitUntilNotAnimating(lookForEnriched)
                 lastAnimationTime = currentTime
                 randomTime = math.random(3, 5)
             end
-            return os.difftime(currentTime, lastAnimationTime) >= randomTime or (lookForEnriched and FuryUtils.npcExists(enrichedId))
+            return os.difftime(currentTime, lastAnimationTime) >= randomTime or (lookForEnriched and FuryUtils:npcExists(enrichedId))
         end,
         120,  -- 120 second timeout
         "animation to finish",
@@ -96,10 +94,10 @@ end
 
 local function getRiftId()
     local currentRift = nil
-    if FuryUtils.objExists(riftIds.cache) then
+    if FuryUtils:objExists(riftIds.cache) then
         print("Cache")
         currentRift = riftIds.cache
-    elseif FuryUtils.objExists(riftIds.normal) then
+    elseif FuryUtils:objExists(riftIds.normal) then
         print("Rift")
         currentRift = riftIds.normal
     end
@@ -142,9 +140,9 @@ while API.Read_LoopyLoop() do
         if API.DoAction_Object1(0x29, 160, { getRiftId() }, 50) then
             FuryUtils:sleepUntil(function() return API.InvStackSize(chronicleIds.enhanced) < 10 end, 10, "empower rift")
         end
-    elseif FuryUtils.npcExists(enrichedId) then
+    elseif FuryUtils:npcExists(enrichedId) then
         harvest(enrichedId)
-    elseif FuryUtils.npcExists(normalId) then
+    elseif FuryUtils:npcExists(normalId) then
         harvest(normalId)
     end
     API.RandomSleep2(300, 300, 300)

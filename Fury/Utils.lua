@@ -79,7 +79,7 @@ end
 -- @param objId The ID of the object to check for.
 -- @param distance (optional) The distance within which to check for the object.
 -- @return true if the object exists within the specified distance, false otherwise.
-function FuryUtils.objExists(objId, distance)
+function FuryUtils:objExists(objId, distance)
     distance = distance or 20  -- Default distance is 20 if not specified
     if type(objId) == "table" then
         for _, id in ipairs(objId) do
@@ -177,7 +177,7 @@ end
 --                    or an array of points for a polygon.
 -- @return boolean True if the player is within the specified area, False otherwise.
 -- @usage 
---      -- Example for a rectangle:
+--      -- Example for a rectangle
 --      local rectangleArea = {3020, 3234, 3022, 3239}
 --      local inRectangle = FuryUtils:playerInArea(rectangleArea)
 --      print("Player is in rectangle area: ", inRectangle)

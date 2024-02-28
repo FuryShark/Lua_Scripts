@@ -619,7 +619,7 @@ local function findHighestLevelEntity(entities, playerLevel, island, entityType)
 
         if levelRequired and levelRequired <= playerLevel and levelRequired > highestLevel then
             for _, entityId in ipairs(entityIds) do
-                local result = API.GetAllObjArrayInteract({entityId}, 40, entityType)
+                local result = API.GetAllObjArrayInteract({entityId}, 40, {entityType})
                 for _, foundEntity in ipairs(result) do
                     if isEntityInIsland(foundEntity, island) then
                         highestLevel = levelRequired
